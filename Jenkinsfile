@@ -1,5 +1,5 @@
 pipeline {
-  agent inteliventi
+  agent {'inteliventi'}
   stages {
         stage("Checkout Git") {
             steps {
