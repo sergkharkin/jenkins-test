@@ -1,7 +1,7 @@
 pipeline {
   agent {
         docker { 
-            image 'https://hub.docker.com/repository/docker/sergkharkin/speedtest'
+            image 'sergkharkin/speedtest'
         }
     }
   stages {
