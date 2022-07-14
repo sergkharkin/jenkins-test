@@ -11,7 +11,6 @@ pipeline {
                 sh '''
                 ls -la
                 docker ps -a
-                whoami
                 '''
             }
         }
