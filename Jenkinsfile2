@@ -1,8 +1,7 @@
 pipeline {
-  agent {label 'inteliventi'}
   agent {
         docker { 
-            image 'sergkharkin/speedtest'
+            image 'https://hub.docker.com/repository/docker/sergkharkin/speedtest'
         }
     }
   stages {
