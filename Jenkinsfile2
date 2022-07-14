@@ -1,0 +1,22 @@
+pipeline {
+  agent {label 'inteliventi'}
+  agent {
+        docker { 
+            image 'sergkharkin/speedtest'
+        }
+    }
+  stages {
+        stage("List repository") {
+            steps {
+                sh '''
+                docker ps -a
+                '''
+            }
+        }
+    }
+    post { 
+        always { 
+            cleanWs()
+        }
+    }
+}
