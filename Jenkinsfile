@@ -21,6 +21,7 @@ pipeline {
         stage("Show files in repository") {
             steps {
                 sh '''
+                pwd
                 ls -lah
                 '''
             }
