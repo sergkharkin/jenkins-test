@@ -1,20 +1,27 @@
 pipeline {
-  agent {
-        docker { 
-            image 'sergkharkin/speedtest'
-        }
-    }
-  stages {
-        stage("List repository") {
+    agent { label 'inteliventi' }
+    stages {
+        stage('run docker') {
+            agent {
+                dockerfile {
+                  customWorkspace '/home/user/jenkins'
+                  filename 'Dockerfile'
+                }
+            }
             steps {
-                sh '''
-                docker ps -a
-                '''
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
+        stage('список контейнеров') {
+            agent {label 'inteliventi'}
+            steps {
+                sh 'docker ps -a'
+            }
+        }    
     }
-    post { 
-        always { 
+    post {
+        always {
             cleanWs()
         }
     }
