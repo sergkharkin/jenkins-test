@@ -1,8 +1,8 @@
 pipeline {
   agent {label 'inteliventi'}
-  environment {
-        MYRESULT = "Empty"
-  }
+  #environment {
+  #      MYRESULT = "Empty"
+  #}
   stages {
         stage("Checkout Git") {
             steps {
@@ -20,20 +20,20 @@ pipeline {
         }
         stage("Test site") {
             steps {
-                sh '''#!/bi/bash
+                sh '''#!/bin/bash
                 set -x
                 CURL_MAX_TIME=15
                 STATUS_CODE=$(curl -sL -w "%{http_code}" localhost:8000 -o /dev/null --max-time ${CURL_MAX_TIME})
                 if [[ "$STATUS_CODE" == "200" ]]; then
                     echo "Jenkins has come up and ready to use"
-                    MYRESULT = "Good"
+                    #MYRESULT = "Good"
                 else
                     echo "Jenkins did not recieved a correct status code"
                     echo "Returned: $STATUS_CODE"
                     #git revert HEAD~1
                     #git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                     #sudo cp -r -f wp-docker /var/www/html2/
-                    MYRESULT = "Revert"
+                    #MYRESULT = "Revert"
                 fi
                 '''
             }
@@ -52,7 +52,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result}-${MYRESULT}'
+                *Status :* ${currentBuild.result}'
                 """
             }
             cleanWs()
