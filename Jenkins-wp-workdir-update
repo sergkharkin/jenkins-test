@@ -1,8 +1,5 @@
 pipeline {
   agent {label 'inteliventi'}
-  #environment {
-  #      MYRESULT = "Empty"
-  #}
   stages {
         stage("Checkout Git") {
             steps {
