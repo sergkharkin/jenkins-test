@@ -1,7 +1,7 @@
 pipeline {
   agent {label 'inteliventi'}
   environment {
-        EXTRA = ''
+        MYEXTRA = "TEST"
   }
   stages {
         stage("Checkout Git") {
@@ -26,14 +26,14 @@ pipeline {
                 STATUS_CODE=$(curl -sL -w "%{http_code}" localhost:8000 -o /dev/null --max-time ${CURL_MAX_TIME})
                 if [[ "$STATUS_CODE" == "200" ]]; then
                     echo "Jenkins has come up and ready to use"
-                    env.EXTRA = 'Good'
+                    #env.EXTRA = 'Good'
                 else
                     echo "Jenkins did not recieved a correct status code"
                     echo "Returned: $STATUS_CODE"
                     #git revert HEAD~1
                     git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                     sudo cp -r -f wp-docker /var/www/html2/
-                    env.EXTRA = 'Revert!'
+                    #env.EXTRA = 'Revert!'
                 fi
                 '''
             }
@@ -52,7 +52,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result} $EXTRA'
+                *Status :* ${currentBuild.result} ${env.MYEXTRA}'
                 """
             }
             cleanWs()
