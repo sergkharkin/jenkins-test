@@ -33,7 +33,7 @@ pipeline {
 
                     if [[ "$STATUS_CODE" == "200" ]]; then
                         echo "Jenkins has come up and ready to use"
-                        RESULT="Всё хорошо"
+                        MYRESULT="Всё хорошо"
                         #exit 0
                     else
                         echo "Jenkins did not return a correct status code yet"
@@ -41,7 +41,7 @@ pipeline {
                         git revert HEAD~1
                         git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                         sudo cp -r -f wp-docker /var/www/html2/
-                        RESULT="Откат!!!"
+                        MYRESULT="Откат!!!"
                     fi
                 #done
 
@@ -64,7 +64,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result} ${RESULT}'
+                *Status :* ${currentBuild.result} ${MYRESULT}'
                 """
             }
             cleanWs()
