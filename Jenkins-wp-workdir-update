@@ -33,15 +33,15 @@ pipeline {
 
                     if [[ "$STATUS_CODE" == "200" ]]; then
                         echo "Jenkins has come up and ready to use"
-                        RESULT='Всё хорошо'
+                        RESULT="Всё хорошо"
                         #exit 0
                     else
                         echo "Jenkins did not return a correct status code yet"
                         echo "Returned: $STATUS_CODE"
-                        git revert HEAD~
+                        git revert HEAD~ --skip
                         git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                         sudo cp -r -f wp-docker /var/www/html2/
-                        RESULT='Откат!!!'
+                        RESULT="Откат!!!"
                     fi
                 #done
 
