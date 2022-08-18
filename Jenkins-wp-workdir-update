@@ -52,7 +52,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result} $EXTRA'
+                *Status :* ${currentBuild.result} $env.EXTRA'
                 """
             }
             cleanWs()
