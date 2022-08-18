@@ -20,7 +20,7 @@ pipeline {
         }
         stage("Test site") {
             steps {
-                sh """
+                sh '''
                 set -x
 
                 CURL_MAX_TIME=15
@@ -49,7 +49,7 @@ pipeline {
 
                 #echo "Jenkins still hasn't returned a 200 status code ${ATTEMPTS} attempts"
                 #exit 1
-                """
+                '''
             }
         }
     }
