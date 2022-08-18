@@ -10,15 +10,43 @@ pipeline {
             steps {
                 sh '''
                 pwd
-                sudo cp -r -f wp-docker /var/www/html2/
+                #sudo cp -r -f wp-docker /var/www/html2/
                 ls -lah
                 '''
             }
         }
-        stage("Test internet connection") {
+        stage("Test site") {
             steps {
                 sh '''
-                #speedtest-cli
+                set -x
+
+                CURL_MAX_TIME=15
+                #ATTEMPTS=2
+                #SLEEP_TIME=10
+
+                #for ATTEMPT in $(seq ${ATTEMPTS}); do
+                #    echo "Attempt ${ATTEMPT} of ${ATTEMPTS}"
+                #    echo "Curling against the Jenkins server"
+                #    echo "Should expect a 200 within ${CURL_MAX_TIME} seconds"
+                    STATUS_CODE=$(curl -sL -w "%{http_code}" localhost:8000 -o /dev/null \
+                        --max-time ${CURL_MAX_TIME})
+
+                    if [[ "$STATUS_CODE" == "200" ]]; then
+                        echo "Jenkins has come up and ready to use"
+                        RESULT='Всё хорошо'
+                        #exit 0
+                    else
+                        echo "Jenkins did not return a correct status code yet"
+                        echo "Returned: $STATUS_CODE"
+                        git revert HEAD~
+                        git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
+                        sudo cp -r -f wp-docker /var/www/html2/
+                        RESULT='Откат!!!'
+                    fi
+                #done
+
+                #echo "Jenkins still hasn't returned a 200 status code ${ATTEMPTS} attempts"
+                #exit 1
                 '''
             }
         }
@@ -36,7 +64,8 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result}'
+                *Status :* ${currentBuild.result}\r
+                *Result :* ${RESULT}'
                 """
             }
             cleanWs()
