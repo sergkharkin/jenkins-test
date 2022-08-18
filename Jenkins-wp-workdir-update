@@ -28,8 +28,8 @@ pipeline {
                     echo "Jenkins did not recieved a correct status code"
                     echo "Returned: $STATUS_CODE"
                     #git revert HEAD~1
-                    #git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
-                    #sudo cp -r -f wp-docker /var/www/html2/
+                    git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
+                    sudo cp -r -f wp-docker /var/www/html2/
                     #MYRESULT = "Revert"
                 fi
                 '''
