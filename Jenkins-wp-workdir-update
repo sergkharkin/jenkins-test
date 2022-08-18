@@ -10,7 +10,7 @@ pipeline {
             steps {
                 sh '''
                 pwd
-                cp -r -f wp-docker /var/www/html2/
+                sudo cp -r -f wp-docker /var/www/html2/
                 ls -lah
                 '''
             }
