@@ -1,0 +1,45 @@
+pipeline {
+  agent {label 'inteliventi'}
+  stages {
+        stage("Checkout Git") {
+            steps {
+                git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git' 
+            }
+        }
+        stage("Deploy Wordpress") {
+            steps {
+                sh '''
+                pwd
+                cp -r -f wp-docker /var/www/html2/
+                ls -lah
+                '''
+            }
+        }
+        stage("Test internet connection") {
+            steps {
+                sh '''
+                #speedtest-cli
+                '''
+            }
+        }
+    }
+    post { 
+        always {
+            script {
+                if (getContext(hudson.FilePath)) {
+                    deleteDir()
+                }
+            }
+            withCredentials([string(credentialsId: 'tel_secret', variable: 'TOKEN'),string(credentialsId: 'tel_chat_id', variable: 'CHAT_ID')]) {
+                sh """
+                curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d chat_id=${CHAT_ID} -d parse_mode=markdown -d\
+                text='*Отчёт:*\r
+                *Project name :* ${currentBuild.projectName}\r
+                *Version :* ${currentBuild.displayName}\r
+                *Status :* ${currentBuild.result}'
+                """
+            }
+            cleanWs()
+        }
+    }
+}
