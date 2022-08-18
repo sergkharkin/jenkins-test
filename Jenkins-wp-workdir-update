@@ -1,7 +1,7 @@
 pipeline {
   agent {label 'inteliventi'}
   environment {
-        EXTRA = 'true'
+        EXTRA = ''
   }
   stages {
         stage("Checkout Git") {
@@ -52,7 +52,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result} env.EXTRA'
+                *Status :* ${currentBuild.result} $EXTRA'
                 """
             }
             cleanWs()
