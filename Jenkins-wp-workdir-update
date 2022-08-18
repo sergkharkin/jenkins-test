@@ -38,7 +38,7 @@ pipeline {
                     else
                         echo "Jenkins did not return a correct status code yet"
                         echo "Returned: $STATUS_CODE"
-                        git revert HEAD~ --skip
+                        git revert --skip  HEAD~
                         git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                         sudo cp -r -f wp-docker /var/www/html2/
                         RESULT="Откат!!!"
@@ -64,8 +64,7 @@ pipeline {
                 text='*Отчёт:*\r
                 *Project name :* ${currentBuild.projectName}\r
                 *Version :* ${currentBuild.displayName}\r
-                *Status :* ${currentBuild.result}\r
-                *Result :* ${RESULT}'
+                *Status :* ${currentBuild.result} ${RESULT}'
                 """
             }
             cleanWs()
