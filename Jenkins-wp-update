@@ -9,6 +9,7 @@ pipeline {
         stage("Update Wordpress") {
             steps {
                 sh '''#!/bin/bash
+                set -x
                 START=$(date +%s)
                 #Делаю бэкап базы
                 docker exec -i mariadb1 mysqldump -u wordpress --password=wordpress wordpress > /home/user/wpdbdump$(date +%y%m%d%H%M%S).sql
