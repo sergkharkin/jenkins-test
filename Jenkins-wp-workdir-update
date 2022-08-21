@@ -25,12 +25,12 @@ pipeline {
                 CURL_MAX_TIME=15
                 STATUS_CODE=$(curl -sL -w "%{http_code}" localhost:8000 -o /dev/null --max-time ${CURL_MAX_TIME})
                 if [[ "$STATUS_CODE" == "200" ]]; then
-                    echo "Jenkins has come up and ready to use"
+                    echo "Success"
                     #MYEXTRA = "Good"
                 else
-                    echo "Jenkins did not recieved a correct status code"
+                    echo "Pizdets"
                     echo "Returned: $STATUS_CODE"
-                    #git revert HEAD~1
+                    git revert HEAD~1
                     git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git'
                     sudo cp -r -f wp-docker /var/www/html2/
                     #MYEXTRA = "Revert!"

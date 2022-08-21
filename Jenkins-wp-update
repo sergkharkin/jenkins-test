@@ -6,19 +6,42 @@ pipeline {
                 git branch: 'prod', url: 'https://github.com/sergkharkin/jenkins-test.git' 
             }
         }
-        stage("Deploy Wordpress") {
+        stage("Update Wordpress") {
             steps {
-                bash '''
-                pwd
-                #docker compose -f wordpress-docker-compose.yml up -d
-                ls -lah
+                sh '''#!/bin/bash
+                START=$(date +%s)
+                #Делаю бэкап базы
+                docker exec -i mariadb1 mysqldump -u wordpress --password=wordpress wordpress > /home/user/wpdbdump$(date +%y%m%d%H%M%S).sql
+                #Стопаю контейнеры
+                docker stop mariadb1 wordpress1
+                while (( ($(docker ps | grep -c mariadb1)+$(docker ps | grep -c wordpress1)) != 0 ))
+                do
+                  sleep 1
+                done
+                #Удаляю
+                docker rm mariadb1 wordpress1
+                #жду удаления
+                while (( ($(docker ps -a | grep -c mariadb1)+$(docker ps -a | grep -c wordpress1)) != 0 ))
+                do
+                  sleep 1
+                done
+                #запускаю контейнеры
+                docker compose -f wordpress-docker-compose.yml up -d
+                #жду поднятия
+                while (( ($(docker ps | grep -c mariadb1)+$(docker ps | grep -c wordpress1)) != 2 ))
+                do
+                  sleep 1
+                done
+                END=$(date +%s)
+                DIFF=$(( $END - $START ))
+                echo "Обновление заняло " $DIFF " секунд"
                 '''
             }
         }
-        stage("Test internet connection") {
+        stage("For testing") {
             steps {
                 sh '''
-                #speedtest-cli
+                pwd
                 '''
             }
         }
