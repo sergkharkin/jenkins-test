@@ -8,9 +8,9 @@ pipeline {
         }
         stage("Deploy Wordpress") {
             steps {
-                sh '''
+                bash '''
                 pwd
-                docker compose -f wordpress-docker-compose.yml up -d
+                #docker compose -f wordpress-docker-compose.yml up -d
                 ls -lah
                 '''
             }
