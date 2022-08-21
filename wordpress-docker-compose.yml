@@ -4,6 +4,7 @@ services:
     image: mariadb:10.6.4-focal
     # If you really want to use MySQL, uncomment the following line
     #image: mysql:8.0.27
+    container_name: mariadb1
     command: '--default-authentication-plugin=mysql_native_password'
     volumes:
       - /var/lib/mysql-wp-docker:/var/lib/mysql
@@ -19,6 +20,7 @@ services:
       - 33060
   wordpress:
     image: wordpress:latest
+    container_name: wordpress1
     ports:
       - 8000:80
     volumes:
